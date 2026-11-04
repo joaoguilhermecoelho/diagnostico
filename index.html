@@ -89,7 +89,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;letter-spacing:.06em;
         <div class="fld"><label for="f_email">E-mail <small>(opcional)</small></label><input id="f_email" type="email" inputmode="email" autocomplete="email"></div>
       </div>
       <div class="blk" id="w_teste">
-        <h2><i>2</i>Teste de Blindagem</h2>
+        <h2><i>2</i>Teste de Proteção</h2>
         <fieldset class="tq"><legend class="ql">Se você parasse de trabalhar por 6 meses, a renda da sua família continuaria a mesma?</legend><div class="opts"><label class="opt"><input type="radio" name="t1" value="Sim"><span>Sim</span></label><label class="opt"><input type="radio" name="t1" value="Não"><span>Não</span></label></div></fieldset>
         <fieldset class="tq"><legend class="ql">Sua família sabe onde estão seus documentos, bens e contas?</legend><div class="opts"><label class="opt"><input type="radio" name="t2" value="Sim"><span>Sim</span></label><label class="opt"><input type="radio" name="t2" value="Não"><span>Não</span></label></div></fieldset>
         <fieldset class="tq"><legend class="ql">Existe um plano definido para o caso de um sócio faltar?</legend><div class="opts"><label class="opt"><input type="radio" name="t3" value="Sim"><span>Sim</span></label><label class="opt"><input type="radio" name="t3" value="Não"><span>Não</span></label></div></fieldset>
@@ -162,19 +162,19 @@ $('fLead').addEventListener('submit',async e=>{
   e.preventDefault();
   const nome=$('f_nome').value.trim(),whats=$('f_whats').value.replace(/\D/g,''),lgpd=$('f_lgpd').checked;
   ['w_nome','w_whats','w_lgpd','w_teste'].forEach(i=>$(i).classList.remove('bad'));
-  const bad=[];if(nome.length<3)bad.push(['w_nome','Escreva seu nome completo.']);if(whats.length<10)bad.push(['w_whats','Informe o WhatsApp com DDD.']);const tv=[1,2,3,4,5].map(i=>val('t'+i));['w_teste'].forEach(i=>$(i).classList.remove('bad'));if(tv.some(v=>!v))bad.push(['w_teste','Responda as 5 perguntas do Teste de Blindagem.']);
+  const bad=[];if(nome.length<3)bad.push(['w_nome','Escreva seu nome completo.']);if(whats.length<10)bad.push(['w_whats','Informe o WhatsApp com DDD.']);const tv=[1,2,3,4,5].map(i=>val('t'+i));['w_teste'].forEach(i=>$(i).classList.remove('bad'));if(tv.some(v=>!v))bad.push(['w_teste','Responda as 5 perguntas do Teste de Proteção.']);
   if(!lgpd)bad.push(['w_lgpd','Marque a autorização de contato para continuar.']);
   if(bad.length){bad.forEach(([i])=>$(i).classList.add('bad'));$('fErr').textContent=bad.map(b=>b[1]).join(' ');$('fErr').hidden=false;$(bad[0][0]).scrollIntoView({behavior:'smooth',block:'center'});return}
   $('fErr').hidden=true;$('btnSend').disabled=true;$('btnSend').textContent='Enviando…';
   const d={nome,whatsapp:mask(whats),email:$('f_email').value.trim(),perfil:val('perfil'),idade:val('idade'),dependentes:val('dependentes'),socios:val('socios'),seguro:val('seguro'),
     preocupacoes:[...document.querySelectorAll('input[name="preocupacoes"]:checked')].map(i=>i.value),horario:val('horario'),
     t1:tv[0],t2:tv[1],t3:tv[2],t4:tv[3],t5:tv[4]};
-  const nota=tv.filter(v=>v==='Sim').length*2; const nivel=nota<=2?'Blindagem baixa':nota<=6?'Blindagem média':'Blindagem alta';
+  const nota=tv.filter(v=>v==='Sim').length*2; const nivel=nota<=2?'Proteção baixa':nota<=6?'Proteção média':'Proteção alta';
   d.nota=nota+'/10 · '+nivel;
   try{await send(d)}catch(err){const q=queue();q.push(d);setQueue(q)}
   $('dName').textContent='Obrigado, '+nome.split(/\s+/)[0]+'!';
   const GAPS=['Renda da família se você parar de trabalhar','Organização de documentos, bens e contas','Plano para o caso de um sócio faltar','Dinheiro para o inventário','Sucessão do patrimônio e da empresa'];
-  const MSG={'Blindagem baixa':'Hoje você está descoberto na maior parte dos pontos. A boa notícia: dá para estruturar isso com calma, antes que seja necessário.','Blindagem média':'Você já tem uma base, mas está descoberto em pontos que podem pesar para sua família ou sua empresa.','Blindagem alta':'Você está à frente da maioria. Vale uma revisão para garantir que o plano acompanha o tamanho atual do seu patrimônio.'};
+  const MSG={'Proteção baixa':'Hoje você está descoberto na maior parte dos pontos. A boa notícia: dá para estruturar isso com calma, antes que seja necessário.','Proteção média':'Você já tem uma base, mas está descoberto em pontos que podem pesar para sua família ou sua empresa.','Proteção alta':'Você está à frente da maioria. Vale uma revisão para garantir que o plano acompanha o tamanho atual do seu patrimônio.'};
   $('sNum').textContent=nota; $('sLevel').textContent=nivel; $('sLevel').className='slevel '+(nota<=2?'baixa':nota<=6?'media':'alta');
   const gaps=tv.map((v,i)=>v==='Não'?GAPS[i]:null).filter(Boolean);
   $('sMsg').textContent=(gaps.length?`Você está descoberto em ${gaps.length} de 5 pontos. `:'')+MSG[nivel];
