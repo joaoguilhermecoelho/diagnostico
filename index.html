@@ -89,7 +89,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;letter-spacing:.06em;
         <div class="fld"><label for="f_email">E-mail <small>(opcional)</small></label><input id="f_email" type="email" inputmode="email" autocomplete="email"></div>
       </div>
       <div class="blk" id="w_teste">
-        <h2><i>2</i>Teste de Proteção</h2>
+        <h2><i>2</i>Diagnóstico de Proteção</h2>
         <fieldset class="tq"><legend class="ql">Se você parasse de trabalhar por 6 meses, a renda da sua família continuaria a mesma?</legend><div class="opts"><label class="opt"><input type="radio" name="t1" value="Sim"><span>Sim</span></label><label class="opt"><input type="radio" name="t1" value="Não"><span>Não</span></label></div></fieldset>
         <fieldset class="tq"><legend class="ql">Sua família sabe onde estão seus documentos, bens e contas?</legend><div class="opts"><label class="opt"><input type="radio" name="t2" value="Sim"><span>Sim</span></label><label class="opt"><input type="radio" name="t2" value="Não"><span>Não</span></label></div></fieldset>
         <fieldset class="tq"><legend class="ql">Existe um plano definido para o caso de um sócio faltar?</legend><div class="opts"><label class="opt"><input type="radio" name="t3" value="Sim"><span>Sim</span></label><label class="opt"><input type="radio" name="t3" value="Não"><span>Não</span></label></div></fieldset>
@@ -162,7 +162,7 @@ $('fLead').addEventListener('submit',async e=>{
   e.preventDefault();
   const nome=$('f_nome').value.trim(),whats=$('f_whats').value.replace(/\D/g,''),lgpd=$('f_lgpd').checked;
   ['w_nome','w_whats','w_lgpd','w_teste'].forEach(i=>$(i).classList.remove('bad'));
-  const bad=[];if(nome.length<3)bad.push(['w_nome','Escreva seu nome completo.']);if(whats.length<10)bad.push(['w_whats','Informe o WhatsApp com DDD.']);const tv=[1,2,3,4,5].map(i=>val('t'+i));['w_teste'].forEach(i=>$(i).classList.remove('bad'));if(tv.some(v=>!v))bad.push(['w_teste','Responda as 5 perguntas do Teste de Proteção.']);
+  const bad=[];if(nome.length<3)bad.push(['w_nome','Escreva seu nome completo.']);if(whats.length<10)bad.push(['w_whats','Informe o WhatsApp com DDD.']);const tv=[1,2,3,4,5].map(i=>val('t'+i));['w_teste'].forEach(i=>$(i).classList.remove('bad'));if(tv.some(v=>!v))bad.push(['w_teste','Responda as 5 perguntas do Diagnóstico de Proteção.']);
   if(!lgpd)bad.push(['w_lgpd','Marque a autorização de contato para continuar.']);
   if(bad.length){bad.forEach(([i])=>$(i).classList.add('bad'));$('fErr').textContent=bad.map(b=>b[1]).join(' ');$('fErr').hidden=false;$(bad[0][0]).scrollIntoView({behavior:'smooth',block:'center'});return}
   $('fErr').hidden=true;$('btnSend').disabled=true;$('btnSend').textContent='Enviando…';
